@@ -2,16 +2,18 @@ const colors = require('colors');
 const staticModel = require("../model/Static");
 
 exports.findOne = (query) => {
-  return new Promise((resolve, reject) => {
+  return staticModel.findOne(query);
+}
 
-    staticModel.findOne(query, (err, static) => {
-      if(err) {
-        console.log(colors.red(err));
-        reject(err);
-      } else {
-        resolve(static);
-      }
-    });
-
+exports.save = (type, version, data) => {
+  let static = new staticModel({
+    type: type,
+    version: version,
+    data: data
   });
+  return static.save();
+}
+
+exports.updateOne = (type, static) => {
+  return staticModel.updateOne({type: type}, static);
 }
