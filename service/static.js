@@ -3,6 +3,27 @@ const riotService = require('../service/riot')
 const staticDAO = require('../persistent/static');
 const dbLogger = require('../persistent/processLog');
 
+exports.checkVersion = (riotVersion) => {
+  (async() => {
+    let lolggVersion = await staticDAO.findOne({type: "version"});
+    if(lolggVersion) {
+      if(lolggVersion.version !== riotVersion) {
+        staticDAO.updateOne("version", {version: riotVersion, data:riotVersion})
+        .then((res) => {
+          console.log(colors.green(`riotVersion update ${lolggVersion} -> ${riotVersion}`), res.n, res.nModified);
+          dbLogger.saveLog("riot", `riotVersion update : ${lolggVersion} -> ${riotVersion}`);
+        });
+      }
+    } else {
+      staticDAO.save("version", riotVersion, riotVersion)
+      .then((static) => {
+        console.log(colors.green(`version save : ${static.version}`));
+        dbLogger.saveLog("riot", `version save : ${static.version}`);
+      });
+    }
+  })();
+}
+
 exports.checkChampion = (riotVersion) => {
 
   let getChampionsObj = null;
