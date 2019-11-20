@@ -27,6 +27,7 @@ startVersionChecker = () => {
     (async () => {
       let riotVersion = await riotService.getRiotVersion();
 
+      staticService.checkVersion(riotVersion);
       staticService.checkChampion(riotVersion);
       staticService.checkSummoner(riotVersion);
 
