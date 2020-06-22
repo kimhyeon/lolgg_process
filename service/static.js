@@ -3,6 +3,11 @@ const riotService = require('../service/riot')
 const staticDAO = require('../persistent/static');
 const dbLogger = require('../persistent/processLog');
 
+// paramters
+// riotVersion: 9.22.1
+// type: champion, summoner
+// 
+
 exports.checkChampion = (riotVersion) => {
 
   let getChampionsObj = null;
@@ -16,6 +21,7 @@ exports.checkChampion = (riotVersion) => {
 
       if(lolggChampion) {
         if(lolggVersion !== riotVersion) {
+          // update
           let riotChampion = await riotService.getChampions(riotVersion),
             champion = getChampionsObj(riotChampion);
 
@@ -23,12 +29,14 @@ exports.checkChampion = (riotVersion) => {
           .then((res) => {
             console.log(colors.green(`riotChampion update ${lolggVersion} -> ${riotVersion}`), res.n, res.nModified);
             dbLogger.saveLog("riot", `riotChampion update : ${lolggVersion} -> ${riotVersion}`);
-          });;
+          });
 
         } else {
           dbLogger.saveLog("riot", `riotChampion ok`);
         }
+        
       } else {
+        // save
         let riotChampion = await riotService.getChampions(riotVersion),
           champion = getChampionsObj(riotChampion);
 
