@@ -20,7 +20,7 @@ let apiRequest = null;
 startVersionChecker = () => {
   console.log(console.log(colors.green('start version-checker')));
 
-  // let versionCheck = schedule.scheduleJob("*/5 * * * * *", () => {
+  //let versionCheck = schedule.scheduleJob("*/5 * * * * *", () => {
   // do it every hour
   let versionCheck = schedule.scheduleJob('0 0 * * * *', () => {
     (async () => {
